@@ -1,12 +1,21 @@
 import { Button, IconButton } from "@mui/material"
 import { FC } from "react"
-import { FaFacebook, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa"
+import { FaArrowLeft, FaFacebook, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa"
 import { phoneNumber } from "../data/info"
+import { Link, useLocation } from "react-router-dom"
 
 const Navbar:FC = () => {
+  const location = useLocation()
   return (
     <div className="bg-slate-900 text-white  p-4 lg:px-40 md:px-20 flex items-center justify-between shadow-md">
+     <div className="flex items-center gap-2">
       <img src="/images/logo.png" alt="logo" className="w-[40px]" />
+      {location.pathname !== "/" && (
+        <IconButton component={Link} to="/">
+          <FaArrowLeft className="fill-amber-100" />
+        </IconButton>
+      )}
+     </div>
 
         
         {/* icons */}
