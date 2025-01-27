@@ -1,36 +1,64 @@
 import {FC, useState, useEffect } from "react";
+import client, { urlFor } from "../sanity";
 
 const Carousel: FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const items = [
-    "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT15m1zlN0XxCPpn4e7Z4n5HzVz4IhKDjTCbi9PVaO_yIXGXRLrxgLdx51HyxOz8XTLNwYqtwm_QLBD_HXlPcZquw",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQJ2sZUUc6xap9g__-HYUVi9LA2MnfG8_7xF33YejfCkudFpb2voAVKP3K2kg9RBHVo4gFx5saiDaNNzxhhMLjPg",
-  ];
+  const [banners, setBanners] = useState([]) 
+  const [bigTitle, setBigTitle] = useState("")
+  const [bigText, setBigText] = useState("")
+  
+ 
+    useEffect(() => {
+      const fetchBanners = async () => {
+        const query = `*[_type == "banner"]`
+        try {
+          const allData = await client.fetch(query);
+          
+          setBanners(allData[0].bigimages)
+          setBigTitle(allData[0].bigtitle)
+          setBigText(allData[0].bigtext)
+    
+        } catch(e){
+          console.error(e)
+        }   
+      }
+    
+      fetchBanners();
+    }, [])
 
-  const handlePrev = () => {
-    setActiveIndex((prevIndex) => (prevIndex === 0 ? items.length - 1 : prevIndex - 1));
-  };
 
-  const handleNext = () => {
-    setActiveIndex((prevIndex) => (prevIndex === items.length - 1 ? 0 : prevIndex + 1));
-  };
+    const handleNext = () => {
+      if (banners.length > 0) {
+        setActiveIndex((prevIndex) => (prevIndex === banners.length - 1 ? 0 : prevIndex + 1));
+      }
+    };
+    
+    const handlePrev = () => {
+      if (banners.length > 0) {
+        setActiveIndex((prevIndex) => (prevIndex === 0 ? banners.length - 1 : prevIndex - 1));
+      }
+    };
+    
 
   const goToSlide = (index: number) => {
     setActiveIndex(index);
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      handleNext();
-    }, 5000); // Change slide every 5 seconds
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, []);
+    if (banners.length > 0) {
+      const interval = setInterval(() => {
+        handleNext();
+      }, 5000); // Change slide every 5 seconds
+      return () => clearInterval(interval); // Cleanup interval on unmount
+    }
+  }, [banners]);
+  
 
   return (
     <div id="default-carousel" className="relative w-full">
       {/* Carousel Wrapper */}
       <div className="relative h-[300px] overflow-hidden drop-shadow shadow">
-        {items.map((src, index) => (
+        {banners.map((src, index) => (
           <div
             key={index}
             className={`absolute w-full transition-opacity duration-700 ease-in-out ${
@@ -38,7 +66,7 @@ const Carousel: FC = () => {
             }`}
           >
             <img
-              src={src}
+              src={urlFor(src).url()}
               className="absolute block w-full object-cover object-center -translate-x-1/2 translate-y-[-25%] top-[50%] left-[50%]"
               alt={`Slide ${index + 1}`}
             />
@@ -48,13 +76,13 @@ const Carousel: FC = () => {
 
 
         {/* TITLE */}
-        <h1 className="absolute top-[50%] left-[50%] -translate-[50%] text-7xl drop-shadow-[0_1.2px_1.2px_rgba(255,255,255,0.8)] italic">TOP IN MOROCCO <p></p> </h1>
+        <h1 className="absolute top-[50%] left-[50%] -translate-[50%] text-7xl drop-shadow-[0_1.2px_1.2px_rgba(255,255,255,0.8)] italic">{bigTitle} <p className="text-[13px]">{bigText}</p> </h1>
       
       
       </div>
       {/* Slider Indicators */}
       <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-        {items.map((_, index) => (
+        {banners.map((_, index) => (
           <button
             key={index}
             type="button"

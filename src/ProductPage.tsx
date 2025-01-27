@@ -4,6 +4,7 @@ import client, { urlFor } from "./sanity";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import Navbar from "./components/Navbar";
 import FabWhatsapp from "./components/FabWhatsapp";
+import { CircularProgress } from "@mui/material";
 
 interface Product {
     _id: string;
@@ -40,18 +41,20 @@ const ProductPage = () => {
     }, [id]);
 
     if (!product) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+        return <div className="flex justify-center items-center h-screen">
+            <CircularProgress />
+        </div>;
     }
 
     return (
-        <main>
+        <main className="h-screen overflow-auto" >
             <Navbar />
-            <div className="px-20 md:px-52 p-4 flex flex-col text-justify items-center justify-between">
+            <div className="px-6  md:px-52 p-4 flex flex-col text-justify items-center justify-between">
             <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
             <p className="text-lg mb-4">{product.description}</p>
             <div className="flex flex-col items-center">
                 <img className="w-[300px] h-[300px] md:w-[600px] md:h-[600px] rounded-lg shadow-md mb-4" src={urlFor(product.cover).url()} ref={bigImageRef} alt={product.name} />
-                <div className="flex space-x-4">
+                <div className="flex flex-wrap items-center justify-center gap-2">
                 { [product.cover, ...product.images].map((image, index) => (
                     <img
                     key={index}

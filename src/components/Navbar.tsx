@@ -1,10 +1,18 @@
 import { Button, IconButton } from "@mui/material"
-import { FC } from "react"
+import { FC, useEffect, useState } from "react"
 import { FaArrowLeft, FaFacebook, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa"
 import { phoneNumber } from "../data/info"
 import { Link, useLocation } from "react-router-dom"
 
 const Navbar:FC = () => {
+  const [width, setWidth] = useState(window.innerWidth)
+
+  useEffect(() => {
+    window.onresize = () => {
+      setWidth(window.innerWidth)
+    }
+  }, [])
+
   const location = useLocation()
   return (
     <div className="bg-slate-900 text-white  p-4 lg:px-40 md:px-20 flex items-center justify-between shadow-md">
@@ -20,10 +28,14 @@ const Navbar:FC = () => {
         
         {/* icons */}
         <div className="flex items-center gap-4">
-            <Button href={"https://wa.me/" + phoneNumber}  target="_blank" variant="contained" sx={{backgroundColor:'oklch(0.696 0.17 162.48)',color:'black'}}  className=" flex items-center gap-2 text-emerald-500">
-                <FaWhatsapp className="fill-slate-900"/>
-                {phoneNumber}
-            </Button>
+          
+          {width > 600 && (
+              <Button href={"https://wa.me/" + phoneNumber}  target="_blank" variant="contained" sx={{backgroundColor:'oklch(0.696 0.17 162.48)',color:'black'}}  className=" flex items-center gap-2 text-emerald-500  ">
+                  <FaWhatsapp className="fill-slate-900"/>
+                  {phoneNumber}
+              </Button>
+
+          )}
 
             <IconButton >
               <FaInstagram className="fill-amber-100" />
