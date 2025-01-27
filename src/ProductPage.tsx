@@ -53,7 +53,7 @@ const ProductPage = () => {
             <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
             <p className="text-lg mb-4">{product.description}</p>
             <div className="flex flex-col items-center">
-                <img className="w-[300px] h-[300px] md:w-[600px] md:h-[600px] rounded-lg shadow-md mb-4" src={urlFor(product.cover).url()} ref={bigImageRef} alt={product.name} />
+                <img className="w-[500px] h-[300px] md:w-[900px] md:h-[600px] shadow-lg mb-4" src={urlFor(product.cover).url()} ref={bigImageRef} alt={product.name} />
                 <div className="flex flex-wrap items-center justify-center gap-2">
                 { [product.cover, ...product.images].map((image, index) => (
                     <img

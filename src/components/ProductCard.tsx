@@ -3,10 +3,11 @@ import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { FaWhatsapp } from "react-icons/fa";
 import { urlFor } from "../sanity";
 import { Link } from "react-router-dom";
+import { phoneNumber } from "../data/info";
 
 export default function ProductCard({name,description, image,link}: {link:string,name: string,description : string, image: SanityImageSource}) {
   return (
-    <Card sx={{ width: 345,margin:"auto" }}>
+    <Card sx={{ width: 345,margin:"auto",boxShadow:"none",borderRadius:0 }}>
       <CardActionArea component={Link} to={`/product/${link}`}>
         <CardMedia
           component="img"
@@ -23,7 +24,7 @@ export default function ProductCard({name,description, image,link}: {link:string
           </Typography>
         </CardContent>
         <CardActions className="flex items-center gap-2 text-emerald-400">
-          <FaWhatsapp /> 0610101010
+          <FaWhatsapp /> {phoneNumber}
         </CardActions>
       </CardActionArea>
     </Card>
